@@ -1,0 +1,39 @@
+{
+  "allPlaceholder": "Find Lease",
+  "showInfoWindowOnSelect": true,
+  "sources": [
+    {
+      "layerId": "TX_Land_5615_3",
+      "url": "http://gis2.logicsolutionsgroup.com:6080/arcgis/rest/services/Logic_Demo/TX_Land/MapServer/3",
+      "name": "Texas County",
+      "placeholder": "Find county",
+      "searchFields": [
+        "COUNTY_NAME"
+      ],
+      "displayField": "COUNTY_NAME",
+      "exactMatch": false,
+      "searchInCurrentMapExtent": false,
+      "zoomScale": 50000,
+      "maxSuggestions": 6,
+      "maxResults": 6,
+      "type": "query"
+    },
+    {
+      "layerId": "TX_Leases_2391_0",
+      "url": "http://gis2.logicsolutionsgroup.com:6080/arcgis/rest/services/Logic_Demo/TX_Leases/MapServer/0",
+      "name": "Texas Leases",
+      "placeholder": "Find Lease",
+      "searchFields": [
+        "DOCUMENT_ID",
+        "LCN"
+      ],
+      "displayField": "DOCUMENT_ID",
+      "exactMatch": false,
+      "searchInCurrentMapExtent": false,
+      "zoomScale": 50000,
+      "maxSuggestions": 6,
+      "maxResults": 6,
+      "type": "query"
+    }
+  ]
+}

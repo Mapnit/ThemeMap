@@ -1,0 +1,37 @@
+{
+  "LeaseLayerUrl": "http://gis2.logicsolutionsgroup.com:6080/arcgis/rest/services/Logic_Demo/TX_Leases/MapServer/0",
+  "themes": [{
+    "displayName": "Working Interest",
+	"thumbnail": "", 
+    "field": "ROYALTY", 
+    "type": "range", 
+	"segments": [{
+	  "max": 0.25
+	}, {
+	  "min": 0.25,
+	  "max": 0.50
+	}, {
+	  "min": 0.50,
+	  "max": 0.75
+	}, {
+	  "min": 0.75,
+	  "max": 1.0
+	}]
+  }, {
+    "displayName": "Expiry Date",
+	"thumbnail": "", 
+    "field": "TRUE_EXPIRATION_DATE", 
+    "type": "range", 
+	"segments": [{
+	  "max": "2000/1/1"
+	}, {
+	  "min": "2000/1/1",
+	  "max": "2010/1/1"
+	}, {
+	  "min": "2010/1/1",
+	  "max": "2020/1/1"
+	}, {
+	  "min": "2020/1/1"
+	}]
+  }]
+}
