@@ -27,7 +27,7 @@ define([
 ],
 function (declare, lang, html, _WidgetBase, _TemplatedMixin, on, query, utils) {
   return declare([_WidgetBase, _TemplatedMixin], {
-    templateString: '<div class="jimu-img-node"></div>',
+    templateString: '<div class="lsg-img-node"></div>',
     /**
     *options:
     *img: the img url,
@@ -60,13 +60,13 @@ function (declare, lang, html, _WidgetBase, _TemplatedMixin, on, query, utils) {
     },
 
     onClick: function(){
-      query('.jimu-img-node', this.getParent().domNode).removeClass('jimu-state-selected');
-      query(this.domNode).addClass('jimu-state-selected');
+      query('.lsg-img-node', this.getParent().domNode).removeClass('lsg-state-selected');
+      query(this.domNode).addClass('lsg-state-selected');
     },
 
     highLight: function(){
-      query('.jimu-img-node', this.getParent().domNode).removeClass('jimu-state-selected');
-      query(this.domNode).addClass('jimu-state-selected');
+      query('.lsg-img-node', this.getParent().domNode).removeClass('lsg-state-selected');
+      query(this.domNode).addClass('lsg-state-selected');
     },
 
     startup: function(){

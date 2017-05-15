@@ -19,27 +19,20 @@ function(declare, lang, array, html, BaseWidget, on, aspect, string,
   return declare([BaseWidget], {
     //these two properties is defined in the BaseWidget
     baseClass: 'lsg-widget-themeMap',
-    name: 'Bookmark',
+    name: 'ThemeMap',
 
-    //bookmarks: Object[]
-    //    all of the bookmarks, the format is the same as the config.json
     themes: [],
 
     startup: function(){
-      // summary:
-      //    this function will be called when widget is started.
-      // description:
-      //    see dojo's dijit life cycle.
       this.inherited(arguments);
 
       this.themeList = new TileLayoutContainer({
-        itemSize: {width: 160, height: 92}, //image size is: 100*60,
+        itemSize: {width: 140, height: 92}, //image size is: 100*60,
         hmargin: 15,
         vmargin: 5
       }, this.themeListNode);
 
       this.themeList.startup();
-
     },
 
     onOpen: function(){
@@ -103,8 +96,6 @@ function(declare, lang, array, html, BaseWidget, on, aspect, string,
     },
 
     _onThemeClick: function(theme) {
-      // summary:
-      //    set the map extent or camera, depends on it's 2D/3D map
       array.some(this.themes, function(b, i){
         if(b.displayName === theme.displayName){
           this.currentIndex = i;
@@ -113,7 +104,11 @@ function(declare, lang, array, html, BaseWidget, on, aspect, string,
       }, this);
 
       //require the module on demand
-
+	  this._displayThemeMap(theme); 
+	}, 
+	
+	_displayThemeMap: function(theme) {
+	}
 
   });
 });
