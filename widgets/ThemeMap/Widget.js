@@ -8,6 +8,11 @@ define([
   'dojo/on',
   'dojo/aspect',
   'dojo/string',
+  'esri/layers/FeatureLayer',
+  'esri/InfoTemplate', 
+  'esri/Color', 
+  'esri/symbols/SimpleLineSymbol', 
+  'esri/symbols/SimpleFillSymbol', 
   'esri/SpatialReference',
   './ImageNode',
   './LayoutsContainer',
@@ -15,13 +20,17 @@ define([
   'libs/storejs/store'
 ],
 function(declare, lang, array, html, BaseWidget, on, aspect, string,
-  SpatialReference, ImageNode, TileLayoutContainer, utils, store) {
+  FeatureLayer, InfoTemplate, Color, SimpleLineSymbol, SimpleFillSymbol, SpatialReference, 
+  ImageNode, TileLayoutContainer, utils, store) {
   return declare([BaseWidget], {
     //these two properties is defined in the BaseWidget
     baseClass: 'lsg-widget-themeMap',
     name: 'ThemeMap',
 
     themes: [],
+	
+	currentIndex: -1, 
+	currentLayer: null, 
 
     startup: function(){
       this.inherited(arguments);
@@ -43,6 +52,10 @@ function(declare, lang, array, html, BaseWidget, on, aspect, string,
     onClose: function(){
       this.themes = [];
 	  this.currentIndex = -1;
+	  if (this.currentLayer) {
+		this.map.removeLayer(this.currentLayer); 
+	  }
+	  this.currentLayer = null; 
     },
 
     onMinimize: function(){
@@ -88,7 +101,7 @@ function(declare, lang, array, html, BaseWidget, on, aspect, string,
 
       node = new ImageNode({
         img: thumbnail,
-        label: theme.displayName
+        label: theme.title
       });
       on(node.domNode, 'click', lang.hitch(this, lang.partial(this._onThemeClick, theme)));
 
@@ -97,18 +110,107 @@ function(declare, lang, array, html, BaseWidget, on, aspect, string,
 
     _onThemeClick: function(theme) {
       array.some(this.themes, function(b, i){
-        if(b.displayName === theme.displayName){
+        if(b.title === theme.title){
           this.currentIndex = i;
           return true;
         }
       }, this);
+	  
+	  // remove the current layer
+	  if (this.currentLayer) {
+	    this.map.removeLayer(this.currentLayer); 
+	    this.currentLayer = null;
+	  }
 
-      //require the module on demand
-	  this._displayThemeMap(theme); 
+	  // create a new theme
+	  this.currentLayer = new FeatureLayer(theme.layerUrl, {
+		name: theme.title, 
+        outFields: ["*"], 
+		mode: FeatureLayer.MODE_ONDEMAND
+      });
+	  
+	  on(this.currentLayer, 'load', lang.hitch(this, lang.partial(this._displayThemeMap, theme))); 
+	  
 	}, 
 	
 	_displayThemeMap: function(theme) {
-	}
+	  var defaultSymbol = new SimpleFillSymbol();
+	  if (!theme.defaultStyle) {
+		defaultSymbol.setColor(new Color([150, 150, 150, 0.5]));
+		defaultSymbol.setOutline(
+		  new SimpleLineSymbol().setWidth(0.1)
+								.setColor(new Color([128,128,128]))
+		); 
+	  } else {
+		defaultSymbol.setColor(Color.fromString(theme.defaultStyle.fillColor));
+		defaultSymbol.setOutline(
+		  new SimpleLineSymbol().setWidth(theme.defaultStyle.outlineWidth)
+								.setColor(theme.defaultStyle.outlineColor)
+		); 	
+	  }
+	
+	  switch(theme.type) {
+		case "range": 
+		  this._displayMapAsClassBreaks(theme, defaultSymbol); 
+		  break; 
+		case "unique": 
+		  this._displayMapAsUnqiueValues(theme, defaultSymbol); 
+		  break;
+		default: 
+		  this._displayMapAsSingleTheme(defaultSymbol); 
+	  }
+	}, 
+	
+	_displayMapAsClassBreaks: function(theme, defaultSymbol) {
+      //require the module on demand
+	  require(['esri/renderers/ClassBreaksRenderer'], lang.hitch(this, function(ClassBreaksRenderer){
+          var renderer = new ClassBreaksRenderer(defaultSymbol, theme.field);
+		  array.forEach(theme.segments, lang.hitch(this, function(segment) {
+		    var symbol = new SimpleFillSymbol();
+            symbol.setColor(Color.fromString(segment.style.fillColor));
+		    symbol.setOutline(
+		      new SimpleLineSymbol().setWidth(segment.style.outlineWidth)
+								    .setColor(Color.fromString(segment.style.outlineColor))
+		    ); 
+		    renderer.addBreak(
+			  segment.min?segment.min:-Infinity, segment.max?segment.max:Infinity, 
+			  symbol
+		    ); 
+		  })); 
+		
+		  this.currentLayer.setRenderer(renderer);
+          this.map.addLayer(this.currentLayer);
+        }));
+	},  
 
+	_displayMapAsUnqiueValues: function(theme, defaultSymbol) {
+	  require(['esri/renderers/UniqueValueRenderer'], lang.hitch(this, function(UniqueValueRenderer){
+		  var renderer = new UniqueValueRenderer(defaultSymbol, theme.field);
+		  array.forEach(theme.segments, lang.hitch(this, function(segment) {
+		    var symbol = new SimpleFillSymbol();
+            symbol.setColor(Color.fromString(segment.style.fillColor));
+		    symbol.setOutline(
+		      new SimpleLineSymbol().setWidth(segment.style.outlineWidth)
+								    .setColor(Color.fromString(segment.style.outlineColor))
+		    ); 
+		    renderer.addValue(
+			  segment.value, 
+			  symbol
+		    ); 
+		  })); 
+		  
+		  this.currentLayer.setRenderer(renderer);
+          this.map.addLayer(this.currentLayer);		
+	    }));
+	}, 
+	
+	_displayMapAsSingleTheme: function(symbol) {
+	  require(['esri/renderers/SimpleRenderer'], lang.hitch(this, function(SimpleRenderer){
+		var renderer = new SimpleRenderer(symbol); 
+		
+		this.currentLayer.setRenderer(renderer);
+        this.map.addLayer(this.currentLayer);
+	  }));
+	}
   });
 });

@@ -1,37 +1,83 @@
 {
-  "LeaseLayerUrl": "http://gis2.logicsolutionsgroup.com:6080/arcgis/rest/services/Logic_Demo/TX_Leases/MapServer/0",
   "themes": [{
-    "displayName": "Working Interest",
+    "title": "Working Interest",
+    "layerUrl": "http://gis2.logicsolutionsgroup.com:6080/arcgis/rest/services/Logic_Demo/TX_Leases/MapServer/0",
 	"thumbnail": "", 
     "field": "ROYALTY", 
-    "type": "range", 
+    "type": "range",
+	"defaultStyle" : {
+	    "fillColor": "rgba(150,150,150,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	}, 
 	"segments": [{
-	  "max": 0.25
+	  "max": 0.25, 
+	  "style": {
+	    "fillColor": "rgba(255,0,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}, {
 	  "min": 0.25,
-	  "max": 0.50
+	  "max": 0.50, 
+	  "style": {
+	    "fillColor": "rgba(0,255,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}, {
 	  "min": 0.50,
-	  "max": 0.75
+	  "max": 0.75, 
+	  "style": {
+	    "fillColor": "rgba(255,255,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}, {
 	  "min": 0.75,
-	  "max": 1.0
+	  "max": 1.0, 
+	  "style": {
+	    "fillColor": "rgba(255,0,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}]
   }, {
-    "displayName": "Expiry Date",
+    "title": "Expiry Date",
+    "layerUrl": "http://gis2.logicsolutionsgroup.com:6080/arcgis/rest/services/Logic_Demo/TX_Leases/MapServer/0",
 	"thumbnail": "", 
     "field": "TRUE_EXPIRATION_DATE", 
     "type": "range", 
 	"segments": [{
-	  "max": "2000/1/1"
+	  "min": "2000/1/1", 
+	  "style": {
+	    "fillColor": "rgba(255,0,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}, {
 	  "min": "2000/1/1",
-	  "max": "2010/1/1"
+	  "max": "2010/1/1", 
+	  "style": {
+	    "fillColor": "rgba(255,0,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}, {
 	  "min": "2010/1/1",
-	  "max": "2020/1/1"
+	  "max": "2020/1/1", 
+	  "style": {
+	    "fillColor": "rgba(255,0,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}, {
-	  "min": "2020/1/1"
+	  "max": "2020/1/1", 
+	  "style": {
+	    "fillColor": "rgba(255,0,0,0.5)",
+		"outlineWidth": 0.2, 
+		"outlineColor": "rgba(0,0,0,1)"
+	  }
 	}]
   }]
 }
